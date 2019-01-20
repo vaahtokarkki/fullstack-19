@@ -1,0 +1,61 @@
+#Tehtävä 4
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note \n Form data: "note: Muistiinpano"
+note over selain:
+Palvelin tallentaa note arvon muistiin ja\nvastauksessa antaa location attribuutissa uuden\nosoitteen johon selain tekee GET-pyynnön
+end note
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+palvelin-->selain: HTML-koodi
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+palvelin-->selain: main.js
+
+note over selain:
+Selain suorittaa main.js ja hakee tiedoston "data.json"
+end note
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+palvelin-->selain: [{ content: "Muistiinpano", date: "2019-20-01" }, ...]
+
+#Tehtävä 5
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
+palvelin-->selain: HTML-koodi
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa.js
+palvelin-->selain: main.js
+
+note over selain:
+Selain suorittaa spa.js joka hakee datan
+end note
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+palvelin-->selain: [{ content: "Moi", date: "2019-20-01" }, ...]
+
+#Thetävä 6
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
+palvelin-->selain: HTML-koodi
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa.js
+palvelin-->selain: main.js
+
+note over selain:
+Selain suorittaa spa.js joka hakee datan
+end note
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+palvelin-->selain: [{ content: "Moi", date: "2019-20-01" }, ...]
+
+note over selain:
+Käyttäjä luo uuden muistiinpanon
+end note
+
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+palvelin-->selain: {message: "note created"}
+
+note over selain:
+Selain renderöi uuden muistiinpanon listaan.
+Huom, selain ei hae kaikkia muistiinpanoja
+uudelleen POST pyynnön jälkeen.
+
