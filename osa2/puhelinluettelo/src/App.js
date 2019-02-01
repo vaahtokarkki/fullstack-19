@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react'
 import AddPersonFrom from './components/AddPersonForm'
 import FilterPersons from './components/FilterPersons'
 import PersonsList from './components/PersonsList'
-import axios from 'axios';
+
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -13,19 +14,45 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-
     const person = {
       name: newName,
-      number: newPhone
+      number: newPhone,
+      id: persons.length + 1
     }
 
     const duplicate = persons.find(p => p.name === person.name)
     if (duplicate) {
-      alert(`${person.name} on jo luettelossa!`)
+      if (window.confirm(`${newName} on jo luettelossa, korvataanko vanha numero uudella?`)) {
+        personService
+          .updatePerson(duplicate.id, { ...duplicate, number: newPhone })
+          .then(res =>
+            setPersons(persons.map(p => p.id !== res.id ? p : res))
+          )
+          .catch(err => {
+            alert(`${duplicate.name} oltiin poistettu jo!`)
+          })
+        clearForm()
+      }
       return
+    } else {
+      personService.create(person)
+        .then(res => {
+          setPersons(persons.concat(res))
+        })
     }
+    clearForm()
+  }
 
-    setPersons(persons.concat(person))
+  const onPersonDelete = id => {
+    personService.deletePerson(id)
+      .then(res => setPersons(persons.filter(p => p.id !== id)))
+      .catch(err => {
+        alert(`Henkilö oli jo poistettu!`)
+        setPersons(persons.filter(p => p.id !== id))
+      })
+  }
+
+  const clearForm = () => {
     setNewName('')
     setNewPhone('')
   }
@@ -45,13 +72,10 @@ const App = () => {
   const filterPersons = () => persons.filter(p => p.name.toLowerCase().includes(filter))
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(res => {
-        setPersons(res.data)
-      })
-  },[])
-  
+    personService.getAll()
+      .then(res => setPersons(res))
+  }, [])
+
   return (
     <div>
       <h2>Puhelinluettelo</h2>
@@ -62,7 +86,7 @@ const App = () => {
         newName={newName}
         onPhoneChange={onPhoneChange}
         newPhone={newPhone} />
-      <PersonsList persons={filterPersons()} />
+      <PersonsList persons={filterPersons()} onDelete={onPersonDelete} />
     </div>
   )
 
