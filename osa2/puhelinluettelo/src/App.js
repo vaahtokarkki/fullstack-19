@@ -57,6 +57,13 @@ const App = () => {
           })
           resetMessage()
         })
+        .catch(err => {
+          setMessage({
+            error: true,
+            text: "Virheelliset tiedot"
+          })
+          resetMessage()
+        })
     }
     clearForm()
   }
