@@ -60,7 +60,7 @@ const App = () => {
         .catch(err => {
           setMessage({
             error: true,
-            text: "Virheelliset tiedot"
+            text: err.response.data.error
           })
           resetMessage()
         })
