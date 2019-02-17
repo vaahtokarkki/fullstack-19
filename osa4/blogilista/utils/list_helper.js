@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const reducer = (accumulator, currentValue) => accumulator + currentValue
 
 const compare = (a, b) => {
@@ -26,6 +28,25 @@ const favoriteBlog = (blogs) => {
     return sortedBlogs.sort(compare)[0]
 }
 
+const mostBlogs = (blogs) => {
+    if (blogs === undefined || blogs.length < 1) return null
+
+    const grouped = _.countBy(blogs, 'author')
+
+    let sorted = []
+    for (let author in grouped) {
+        sorted.push([author, grouped[author]])
+    }
+    sorted.sort((a, b) => {
+        return b[1] - a[1]
+    })
+
+    return {
+        author: sorted[0][0],
+        blogs: sorted[0][1]
+    }
+}
+
 module.exports = {
-    dummy, totalLikes, favoriteBlog
+    dummy, totalLikes, favoriteBlog, mostBlogs
 }
