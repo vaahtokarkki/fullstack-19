@@ -39,17 +39,35 @@ const App = () => {
         setBlogs(updated)
     }
 
+    const updateModifiedBlog = (blog) => {
+        const filtered = blogs.filter(b => b.id !== blog.id)
+        setBlogs(filtered.concat(blog))
+    }
+
+    const delteBlog = (id) => {
+        setBlogs(blogs.filter(b => b.id !== id))
+    }
+
     const handleLogout = () => {
         setUser(null)
         window.localStorage.removeItem('loggedNoteappUser')
         blogService.setToken(null)
     }
 
-    const listOfBlogs = () => (
-        blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
-        )
-    )
+    const listOfBlogs = () => {
+        const sorted = blogs.sort((a, b) => {
+            return b.likes - a.likes
+        })
+
+        return (sorted.map(blog =>
+            <Blog
+                key={blog.id}
+                blog={blog}
+                updateBlogs={updateModifiedBlog}
+                deleteBlog={delteBlog}
+                loggedInUser={user}/>
+        ))
+    }
 
     if (user === null) {
         return (

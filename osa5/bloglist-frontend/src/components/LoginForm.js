@@ -1,20 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
 import login from '../services/login.js'
 import PropTypes from 'prop-types'
+import { useField } from '../hooks/index'
 
 const LoginForm = ({ setUser, blogService, setMessage }) => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const username = useField('text')
+    const password = useField('password')
 
     const handleLogin = async (event) => {
         event.preventDefault()
         try {
             const user = await login.loginService({
-                username, password,
+                username: username.value,
+                password: password.value
             })
 
-            setUsername('')
-            setPassword('')
+            username.reset()
+            password.reset()
 
             window.localStorage.setItem(
                 'loggedNoteappUser', JSON.stringify(user)
@@ -29,25 +31,16 @@ const LoginForm = ({ setUser, blogService, setMessage }) => {
             }, 5000)
         }
     }
+
     return (
         <form onSubmit={handleLogin}>
             <div>
                 Käyttäjätunnus
-                <input
-                    type="text"
-                    value={username}
-                    name="Username"
-                    onChange={({ target }) => setUsername(target.value)}
-                />
+                <input  {...username} reset={null} />
             </div>
             <div>
                 Salasana
-                <input
-                    type="password"
-                    value={password}
-                    name="Password"
-                    onChange={({ target }) => setPassword(target.value)}
-                />
+                <input {...password} reset={null} />
             </div>
             <button type="submit">Kirjaudu</button>
         </form>
