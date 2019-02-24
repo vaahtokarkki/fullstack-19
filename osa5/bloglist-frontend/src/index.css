@@ -1,0 +1,17 @@
+.message {
+    background-color: 'lightgreen';
+    color: 'darkgreen';
+    border: '2px solid darkgreen';
+    padding: 15;
+    margin: 20;
+    width: "20%"
+}
+
+.error-message {
+    background-color: 'lightcoral';
+    color: 'darkred';
+    border: '2px solid darkred';
+    padding: 15;
+    margin: 20;
+    width: "20%"
+}
