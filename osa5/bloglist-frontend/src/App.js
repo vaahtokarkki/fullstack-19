@@ -82,7 +82,7 @@ const App = () => {
     }
 
     return (
-        <div>
+        <div className='app-container'>
             <h2>blogs</h2>
             <p>{user.name} logged in</p>
             <Notification message={message} />

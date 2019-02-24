@@ -1,7 +1,7 @@
 import React from 'react'
 import 'jest-dom/extend-expect'
 import { render, fireEvent } from 'react-testing-library'
-import Blog from './Blog';
+import Blog from './Blog'
 
 describe('<Blog />', () => {
     let component

@@ -19,7 +19,7 @@ const LoginForm = ({ setUser, blogService, setMessage }) => {
             password.reset()
 
             window.localStorage.setItem(
-                'loggedNoteappUser', JSON.stringify(user)
+                'loggedBlogAppUser', JSON.stringify(user)
             )
             blogService.setToken(user.token)
             setUser(user)
@@ -33,7 +33,7 @@ const LoginForm = ({ setUser, blogService, setMessage }) => {
     }
 
     return (
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} className='login-form'>
             <div>
                 Käyttäjätunnus
                 <input  {...username} reset={null} />
