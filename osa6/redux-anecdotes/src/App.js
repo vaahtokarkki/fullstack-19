@@ -1,11 +1,17 @@
-import React from 'react';
-
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux'
 import AnecdoteList from './components/AdecdoteList'
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 import AnecdoteFilter from './components/AnecdoteFilter'
+import { initAnecdotes } from './reducers/anecdoteReducer'
 
-const App = () => {
+const App = (props) => {
+  useEffect(() => {
+    props.initAnecdotes()
+  }, [])
+
+
   return (
     <div>
       <h2>Anecdotes</h2>
@@ -17,4 +23,4 @@ const App = () => {
   )
 }
 
-export default App
+export default connect(null, { initAnecdotes })(App)

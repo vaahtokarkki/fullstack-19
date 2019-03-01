@@ -2,12 +2,13 @@ import React from 'react';
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import { connect } from 'react-redux'
 
-
 const AnecdoteForm = (props) => {
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        props.createAnecdote(e.target.content.value)
+        e.persist()
+        const anecdoteContent = e.target.content.value
         e.target.content.value = ''
+        props.createAnecdote(anecdoteContent)
     }
 
     return (
