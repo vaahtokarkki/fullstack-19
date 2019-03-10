@@ -2,8 +2,10 @@ import React from 'react'
 import login from '../services/login.js'
 import PropTypes from 'prop-types'
 import { useField } from '../hooks/index'
+import { connect } from 'react-redux'
+import { setNotification } from '../reducers/notificationReducer'
 
-const LoginForm = ({ setUser, blogService, setMessage }) => {
+const LoginForm = (props) => {
     const username = useField('text')
     const password = useField('password')
 
@@ -21,14 +23,11 @@ const LoginForm = ({ setUser, blogService, setMessage }) => {
             window.localStorage.setItem(
                 'loggedBlogAppUser', JSON.stringify(user)
             )
-            blogService.setToken(user.token)
-            setUser(user)
+            props.blogService.setToken(user.token)
+            props.setUser(user)
         } catch (exception) {
             console.log('Käyttäjätunnus tai salasana virheellinen')
-            setMessage({ error: true, text: 'Käyttäjätunnus tai salasana virheellinen' })
-            setTimeout(() => {
-                setMessage(null)
-            }, 5000)
+            props.setNotification({ error: true, message: 'Käyttäjätunnus tai salasana virheellinen' })
         }
     }
 
@@ -50,7 +49,16 @@ const LoginForm = ({ setUser, blogService, setMessage }) => {
 LoginForm.propTypes = {
     setUser: PropTypes.func.isRequired,
     blogService: PropTypes.object.isRequired,
-    setMessage: PropTypes.func.isRequired
 }
 
-export default LoginForm
+const mapDispatchToProps = {
+    setNotification
+}
+
+
+const ConnectedLoginForm = connect(
+    null,
+    mapDispatchToProps
+)(LoginForm)
+
+export default ConnectedLoginForm

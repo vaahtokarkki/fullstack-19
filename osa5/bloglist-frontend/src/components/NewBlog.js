@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
+import { connect } from 'react-redux'
+import { setNotification } from '../reducers/notificationReducer'
+import { createBlog } from '../reducers/blogReducer'
 
-const NewBlog = ({ updateBlogs, updateMessage }) => {
+const NewBlog = (props) => {
 
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
@@ -9,27 +11,35 @@ const NewBlog = ({ updateBlogs, updateMessage }) => {
 
     const handleSubmit = async (target) => {
         target.preventDefault()
+        target.persist()
+
         const newBlog = {
             title: title,
             author: author,
             url: url
         }
 
-        try {
-            const response = await blogService.create(newBlog)
-            updateBlogs(response)
-            resetForm()
-            updateMessage({
-                error: false,
-                text: 'Blog added succesfully'
-            })
-        } catch (exception) {
-            updateMessage({
+        if (!newBlog.author || !newBlog.title || !newBlog.url) {
+            props.setNotification({
                 error: true,
-                text: 'Missing required fields'
+                message: 'Missing required fields'
             })
-            console.log('err', exception)
+            setTimeout(() => {
+                props.setNotification({ error: false, message: null })
+            }, 1000)
+            return
         }
+
+        props.createBlog(newBlog)
+        resetForm()
+        props.setNotification({
+            error: false,
+            message: 'Blog added succesfully'
+        })
+        setTimeout(() => {
+            props.setNotification({ error: false, message: null })
+        }, 1000)
+
     }
 
     const resetForm = () => {
@@ -70,7 +80,15 @@ const NewBlog = ({ updateBlogs, updateMessage }) => {
     )
 
     return form()
-
 }
 
-export default NewBlog
+const mapDispatchToProps = {
+    setNotification, createBlog
+}
+
+const ConnectedNewBlog = connect(
+    null,
+    mapDispatchToProps
+)(NewBlog)
+
+export default ConnectedNewBlog
