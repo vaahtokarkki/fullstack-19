@@ -24,9 +24,6 @@ const NewBlog = (props) => {
                 error: true,
                 message: 'Missing required fields'
             })
-            setTimeout(() => {
-                props.setNotification({ error: false, message: null })
-            }, 1000)
             return
         }
 
@@ -36,9 +33,6 @@ const NewBlog = (props) => {
             error: false,
             message: 'Blog added succesfully'
         })
-        setTimeout(() => {
-            props.setNotification({ error: false, message: null })
-        }, 1000)
 
     }
 
